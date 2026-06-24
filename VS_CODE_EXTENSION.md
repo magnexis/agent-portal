@@ -2,6 +2,10 @@
 
 The VS Code extension lives in `apps/vscode-extension`.
 
+Official extension link:
+
+- [Agent Portal on the Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/magnificent-language/extensions/agent-portal/hub)
+
 ## Features
 
 - sidebar control center

@@ -128,13 +128,13 @@ class PortalRuntime:
             "config": asdict(self.config),
             "policy": asdict(self.risk_policy),
             "plugins": self.list_plugins(),
-            "runtimeVersion": "0.1.0",
+            "runtimeVersion": "0.0.2",
         }
 
     def health(self) -> dict[str, Any]:
         return {
             "ok": True,
-            "runtimeVersion": "0.1.0",
+            "runtimeVersion": "0.0.2",
             "runtimeStatus": self.session.runtime_status,
             "browserConnected": self.browser_state.connected,
             "currentUrl": self.browser_state.current_url,
@@ -359,7 +359,7 @@ class PortalRuntime:
         report_dir.mkdir(parents=True, exist_ok=True)
         report = SessionReport(
             project_name=self.base_path.name,
-            runtime_version="0.1.0",
+            runtime_version="0.0.2",
             session_id=self.session.session_id,
             start_time=self.session.started_at,
             end_time=utc_now(),

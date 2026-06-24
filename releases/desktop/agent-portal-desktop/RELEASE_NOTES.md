@@ -1,6 +1,6 @@
 # Agent Portal Desktop Runtime Package
 
-Version: 0.1.0
+Version: 0.0.2
 
 Included:
 - desktop runtime build output

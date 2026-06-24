@@ -36,7 +36,7 @@ class AgentPortalMcpServer:
                 {
                     "protocolVersion": "2024-11-05",
                     "capabilities": {"tools": {"listChanged": False}},
-                    "serverInfo": {"name": "agent-portal-mcp", "version": "0.1.0"},
+                    "serverInfo": {"name": "agent-portal-mcp", "version": "0.0.2"},
                 },
             )
         if method == "ping":

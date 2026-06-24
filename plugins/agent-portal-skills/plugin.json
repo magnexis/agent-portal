@@ -1,6 +1,6 @@
 {
   "name": "agent-portal-skills",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "type": "skill-plugin",
   "permissions": [
     "memory:read",

@@ -156,7 +156,7 @@ def print_json_or_text(payload: object, json_output: bool) -> None:
 
 def load_mcp_cli_module():
     repo_root = Path(__file__).resolve().parents[2]
-    mcp_src = repo_root / "packages" / "agent-portal-mcp" / "src"
+    mcp_src = repo_root / "packages" / "agent-portal-mcp"
     if str(mcp_src) not in sys.path:
         sys.path.insert(0, str(mcp_src))
     from agent_portal_mcp import cli as mcp_cli  # type: ignore

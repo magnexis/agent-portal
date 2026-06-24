@@ -4,6 +4,10 @@
 
 This extension is the VS Code entry point for Agent Portal.
 
+Official extension link:
+
+- [Agent Portal on the Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/magnificent-language/extensions/agent-portal/hub)
+
 ## Included Branding
 
 - main extension icon uses the Agent Portal logo

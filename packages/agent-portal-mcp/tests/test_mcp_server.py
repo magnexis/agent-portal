@@ -4,7 +4,7 @@ import sys
 import unittest
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from agent_portal_mcp.bridge.runtime_client import RuntimeClientError
 from agent_portal_mcp.schemas.results import ToolResult
@@ -93,7 +93,7 @@ class FakeClient:
         return {"exportPath": destination or report_name}
 
     def health(self):
-        return {"ok": True, "runtimeVersion": "0.1.0"}
+        return {"ok": True, "runtimeVersion": "0.0.2"}
 
 
 class McpServerTests(unittest.TestCase):

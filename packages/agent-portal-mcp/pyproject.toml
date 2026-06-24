@@ -1,6 +1,6 @@
 [project]
 name = "agent-portal-mcp"
-version = "0.1.0"
+version = "0.0.2"
 description = "MCP server bridge for Agent Portal."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,13 +12,9 @@ authors = [
 [project.scripts]
 agent-portal-mcp = "agent_portal_mcp.cli:main"
 
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["agent_portal_mcp*"]
+[tool.flit.module]
+name = "agent_portal_mcp"
 
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core>=3.12.0,<4"]
+build-backend = "flit_core.buildapi"
