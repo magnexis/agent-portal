@@ -2,13 +2,14 @@
   "name": "agent-portal",
   "displayName": "Agent Portal",
   "description": "Control and steer AI agents through local browser/UI workflows.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "magnificent-language",
   "private": true,
   "files": [
     "dist/extension.js",
     "dist/extension.d.ts",
     "media/agent-portal-logo.png",
+    "LICENSE",
     "README.md",
     "package.json"
   ],

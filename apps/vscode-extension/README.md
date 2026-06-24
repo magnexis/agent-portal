@@ -1,6 +1,6 @@
 # Agent Portal VS Code Extension
 
-![Agent Portal Logo](media/agent-portal-logo.png)
+![Agent Portal Logo](https://github.com/magnexis/agent-portal/raw/main/apps/vscode-extension/media/agent-portal-logo.png)
 
 This extension is the VS Code entry point for Agent Portal.
 

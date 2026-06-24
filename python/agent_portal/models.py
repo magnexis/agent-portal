@@ -91,6 +91,8 @@ class ActionResult:
     action_type: str
     status: ActionStatus
     reason: str
+    target: str | None = None
+    payload: str | None = None
     result: str | None = None
     error: dict[str, object] | None = None
     risk_level: RiskLevel = "low"

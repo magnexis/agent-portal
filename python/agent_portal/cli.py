@@ -4,6 +4,7 @@ import argparse
 import json
 from dataclasses import asdict
 from pathlib import Path
+import sys
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -65,6 +66,20 @@ def main() -> None:
                 }
                 print_json_or_text(results, args.json)
                 return
+        if args.command == "mcp":
+            mcp_cli = load_mcp_cli_module()
+            argv = [args.mcp_command]
+            if args.host or args.port:
+                argv.extend(["--runtime-url", runtime_url])
+            if args.json:
+                argv.append("--json")
+            old_argv = sys.argv[:]
+            try:
+                sys.argv = ["agent-portal-mcp", *argv]
+                mcp_cli.main()
+            finally:
+                sys.argv = old_argv
+            return
     except (HTTPError, URLError) as exc:
         print_json_or_text(
             {
@@ -104,6 +119,11 @@ def build_parser() -> argparse.ArgumentParser:
     plugins_subparsers = plugins_parser.add_subparsers(dest="plugins_command", required=True)
     plugins_subparsers.add_parser("list")
     plugins_subparsers.add_parser("validate")
+
+    mcp_parser = subparsers.add_parser("mcp")
+    mcp_subparsers = mcp_parser.add_subparsers(dest="mcp_command", required=True)
+    mcp_subparsers.add_parser("start")
+    mcp_subparsers.add_parser("doctor")
     return parser
 
 
@@ -132,3 +152,13 @@ def print_json_or_text(payload: object, json_output: bool) -> None:
             print(f"- {entry}")
         return
     print(payload)
+
+
+def load_mcp_cli_module():
+    repo_root = Path(__file__).resolve().parents[2]
+    mcp_src = repo_root / "packages" / "agent-portal-mcp" / "src"
+    if str(mcp_src) not in sys.path:
+        sys.path.insert(0, str(mcp_src))
+    from agent_portal_mcp import cli as mcp_cli  # type: ignore
+
+    return mcp_cli

@@ -89,6 +89,49 @@ class BrowserController:
                 can_continue=True,
             ) from exc
 
+    def close_page(self) -> None:
+        self.stop()
+
+    def refresh(self) -> None:
+        page = self._require_page()
+        try:
+            page.reload(wait_until="domcontentloaded", timeout=self.timeout_ms)
+            page.wait_for_load_state("networkidle", timeout=self.timeout_ms)
+        except Exception as exc:
+            raise BrowserOperationError(
+                "Page refresh failed.",
+                module="agent_portal.browser",
+                likely_cause="The page became unavailable or reload timed out.",
+                suggested_fix="Verify the page is reachable and retry the refresh.",
+                can_continue=True,
+            ) from exc
+
+    def back(self) -> None:
+        page = self._require_page()
+        try:
+            page.go_back(wait_until="domcontentloaded", timeout=self.timeout_ms)
+        except Exception as exc:
+            raise BrowserOperationError(
+                "Browser back navigation failed.",
+                module="agent_portal.browser",
+                likely_cause="There is no prior history entry or the navigation failed.",
+                suggested_fix="Open a page first or verify browser history before retrying.",
+                can_continue=True,
+            ) from exc
+
+    def forward(self) -> None:
+        page = self._require_page()
+        try:
+            page.go_forward(wait_until="domcontentloaded", timeout=self.timeout_ms)
+        except Exception as exc:
+            raise BrowserOperationError(
+                "Browser forward navigation failed.",
+                module="agent_portal.browser",
+                likely_cause="There is no forward history entry or the navigation failed.",
+                suggested_fix="Navigate backward before trying to move forward again.",
+                can_continue=True,
+            ) from exc
+
     def screenshot(self, name: str) -> str:
         page = self._require_page()
         self.screenshot_directory.mkdir(parents=True, exist_ok=True)
@@ -181,6 +224,7 @@ class BrowserController:
             "url": page.url,
             "title": page.title(),
             "dom": page.content(),
+            "accessibilityTree": self.read_accessibility_tree(),
             "consoleErrors": self.read_console(),
             "networkErrors": self.read_network(),
         }
@@ -196,6 +240,19 @@ class BrowserController:
 
     def read_network(self) -> list[str]:
         return list(self._network_errors)
+
+    def read_dom(self) -> str:
+        return self._require_page().content()
+
+    def read_accessibility_tree(self) -> Any:
+        page = self._require_page()
+        accessibility = getattr(page, "accessibility", None)
+        if accessibility is None:
+            return None
+        try:
+            return accessibility.snapshot()
+        except Exception:
+            return None
 
     def read_text(self, selector: str) -> str | None:
         locator = self._resolve_locator(selector)
@@ -220,6 +277,27 @@ class BrowserController:
                 module="agent_portal.browser",
                 likely_cause="The script threw an error or referenced unavailable browser state.",
                 suggested_fix="Validate the script against the current page and retry with a simpler expression.",
+                can_continue=True,
+            ) from exc
+
+    def inspect_element(self, selector: str) -> dict[str, Any]:
+        locator = self._resolve_locator(selector)
+        try:
+            text = locator.text_content(timeout=self.timeout_ms)
+            html = locator.evaluate("(node) => node.outerHTML")
+            is_visible = locator.is_visible()
+            return {
+                "selector": selector,
+                "text": text,
+                "html": html,
+                "visible": is_visible,
+            }
+        except Exception as exc:
+            raise BrowserOperationError(
+                f"Element inspection failed for `{selector}`.",
+                module="agent_portal.browser",
+                likely_cause="The element became detached or could not be serialized.",
+                suggested_fix="Retry with a more specific selector after the page settles.",
                 can_continue=True,
             ) from exc
 

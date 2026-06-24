@@ -101,6 +101,26 @@ class PortalRuntime:
         self.session.current_goal = goal
         self.session.logs.insert(0, f"Goal set to {goal}")
 
+    def get_current_goal(self) -> str | None:
+        return self.session.current_goal
+
+    def set_action_mode(self, mode: str) -> None:
+        if mode not in {"read-only", "assisted", "autonomous", "manual-override"}:
+            raise AgentPortalError(
+                f"Unsupported action mode: {mode}",
+                module="agent_portal.runtime",
+                likely_cause="The requested mode is not part of the runtime steering model.",
+                suggested_fix="Use one of: read-only, assisted, autonomous, manual-override.",
+                can_continue=True,
+            )
+        self.config.action_mode = mode  # type: ignore[assignment]
+        self.risk_policy.mode = mode  # type: ignore[assignment]
+        self.risk_policy.read_only = mode == "read-only"
+        self.session.logs.insert(0, f"Action mode set to {mode}")
+
+    def get_action_queue(self) -> list[dict[str, Any]]:
+        return [asdict(action) for action in self._all_actions()]
+
     def status(self) -> dict[str, Any]:
         return {
             "session": asdict(self.session),
@@ -108,11 +128,13 @@ class PortalRuntime:
             "config": asdict(self.config),
             "policy": asdict(self.risk_policy),
             "plugins": self.list_plugins(),
+            "runtimeVersion": "0.1.0",
         }
 
     def health(self) -> dict[str, Any]:
         return {
             "ok": True,
+            "runtimeVersion": "0.1.0",
             "runtimeStatus": self.session.runtime_status,
             "browserConnected": self.browser_state.connected,
             "currentUrl": self.browser_state.current_url,
@@ -252,6 +274,8 @@ class PortalRuntime:
             action_type=request.action_type,
             status="pending",
             reason=request.reason,
+            target=request.target,
+            payload=request.payload,
             risk_level=request.risk_level,
         )
         if request.risk_level == "blocked":
@@ -277,6 +301,24 @@ class PortalRuntime:
         self.session.rejected_actions.append(action)
         self.session.runtime_status = "blocked"
         return action
+
+    def execute_action(self, action_id: str) -> ActionResult:
+        action = self._find_action(action_id)
+        if action.status == "pending":
+            action = self.approve_action(action_id)
+        if action.status != "approved":
+            raise AgentPortalError(
+                f"Action {action_id} is not approved for execution.",
+                module="agent_portal.runtime",
+                likely_cause="The action is blocked, rejected, completed, or failed.",
+                suggested_fix="Approve a pending action before trying to execute it.",
+                can_continue=True,
+            )
+
+        return self._execute_approved_action(
+            action.action_id,
+            lambda approved: self._dispatch_approved_action(approved),
+        )
 
     def complete_action(
         self,
@@ -369,6 +411,79 @@ class PortalRuntime:
             )
         return manifests
 
+    def close_browser(self) -> ActionResult:
+        return self._execute_action(
+            ActionRequest("browser_close", "Close the browser session", risk_level="medium"),
+            lambda action: self._close_browser_impl(action),
+        )
+
+    def refresh(self) -> ActionResult:
+        return self._execute_action(
+            ActionRequest("browser_refresh", "Refresh the current page", risk_level="low"),
+            lambda action: self._refresh_impl(action),
+        )
+
+    def back(self) -> ActionResult:
+        return self._execute_action(
+            ActionRequest("browser_back", "Navigate backward in browser history", risk_level="low"),
+            lambda action: self._back_impl(action),
+        )
+
+    def forward(self) -> ActionResult:
+        return self._execute_action(
+            ActionRequest("browser_forward", "Navigate forward in browser history", risk_level="low"),
+            lambda action: self._forward_impl(action),
+        )
+
+    def browser_status(self) -> dict[str, Any]:
+        return asdict(self.browser_state)
+
+    def read_dom(self) -> dict[str, Any]:
+        return {
+            "url": self.browser.current_url(),
+            "dom": self.browser.read_dom(),
+        }
+
+    def read_accessibility_tree(self) -> dict[str, Any]:
+        return {
+            "url": self.browser.current_url(),
+            "accessibilityTree": self.browser.read_accessibility_tree(),
+        }
+
+    def read_console_errors(self) -> dict[str, Any]:
+        return {
+            "consoleErrors": self.browser.read_console(),
+        }
+
+    def read_network_failures(self) -> dict[str, Any]:
+        return {
+            "networkFailures": self.browser.read_network(),
+        }
+
+    def inspect_element(self, selector: str) -> dict[str, Any]:
+        return self.browser.inspect_element(selector)
+
+    def list_reports(self) -> list[dict[str, str]]:
+        report_dir = self.base_path / self.config.report_directory
+        if not report_dir.exists():
+            return []
+        return [
+            {"name": report.name, "path": str(report)}
+            for report in sorted(report_dir.glob("*.json"), reverse=True)
+        ]
+
+    def read_report(self, report_name: str) -> dict[str, Any]:
+        report_path = self._resolve_report_path(report_name)
+        return json.loads(report_path.read_text(encoding="utf8"))
+
+    def export_report(self, report_name: str, destination: str | None = None) -> dict[str, str]:
+        report_path = self._resolve_report_path(report_name)
+        export_dir = self.base_path / self.config.report_directory / "exports"
+        export_dir.mkdir(parents=True, exist_ok=True)
+        destination_path = Path(destination) if destination else export_dir / report_path.name
+        destination_path.write_text(report_path.read_text(encoding="utf8"), encoding="utf8")
+        return {"exportPath": str(destination_path)}
+
     def _enforce_policy(self, request: ActionRequest) -> None:
         haystack = f"{request.reason} {request.target or ''} {request.payload or ''}".lower()
         if self.risk_policy.read_only and request.action_type not in {"inspect", "screenshot", "wait"}:
@@ -403,6 +518,28 @@ class PortalRuntime:
         if not self.config.sensitive_screenshots_enabled and self.config.safe_mode:
             return None
         return self.browser.screenshot(label)
+
+    def _find_action(self, action_id: str) -> ActionResult:
+        for action in self._all_actions():
+            if action.action_id == action_id:
+                return action
+        raise AgentPortalError(
+            f"Action {action_id} was not found.",
+            module="agent_portal.runtime",
+            likely_cause="The action id is incorrect or the queue has already been rotated.",
+            suggested_fix="Refresh the action queue and use a current action id.",
+            can_continue=True,
+        )
+
+    def _all_actions(self) -> list[ActionResult]:
+        return (
+            self.session.pending_actions
+            + self.session.approved_actions
+            + self.session.completed_actions
+            + self.session.rejected_actions
+            + self.session.blocked_actions
+            + self.session.failed_actions
+        )
 
     def _execute_action(
         self,
@@ -498,6 +635,81 @@ class PortalRuntime:
         holder["result"] = self.browser.execute(script)
         after = self._capture_if_allowed(f"{action.action_id}-after")
         return self.complete_action(action.action_id, "Executed browser script", after_screenshot=after)
+
+    def _close_browser_impl(self, action: ActionResult) -> ActionResult:
+        self.browser.close_page()
+        self.browser_state.connected = False
+        self.browser_state.current_url = None
+        self.browser_state.page_title = None
+        return self.complete_action(action.action_id, "Closed browser session")
+
+    def _refresh_impl(self, action: ActionResult) -> ActionResult:
+        before = self._capture_if_allowed(f"{action.action_id}-before")
+        self.browser.refresh()
+        after = self._capture_if_allowed(f"{action.action_id}-after")
+        return self.complete_action(action.action_id, "Refreshed page", before, after)
+
+    def _back_impl(self, action: ActionResult) -> ActionResult:
+        before = self._capture_if_allowed(f"{action.action_id}-before")
+        self.browser.back()
+        after = self._capture_if_allowed(f"{action.action_id}-after")
+        return self.complete_action(action.action_id, "Navigated backward", before, after)
+
+    def _forward_impl(self, action: ActionResult) -> ActionResult:
+        before = self._capture_if_allowed(f"{action.action_id}-before")
+        self.browser.forward()
+        after = self._capture_if_allowed(f"{action.action_id}-after")
+        return self.complete_action(action.action_id, "Navigated forward", before, after)
+
+    def _dispatch_approved_action(self, action: ActionResult) -> ActionResult:
+        if action.action_type == "open_url":
+            return self._open_url_impl(action.target or "", action)
+        if action.action_type == "click":
+            return self._click_impl(action.target or "", action)
+        if action.action_type == "type":
+            return self._type_impl(action.target or "", action.payload or "", action)
+        if action.action_type == "scroll":
+            return self._scroll_impl(action.target, action)
+        if action.action_type == "hover":
+            return self._hover_impl(action.target or "", action)
+        if action.action_type == "wait":
+            return self._wait_impl(action.target or "", action)
+        if action.action_type == "screenshot":
+            return self.complete_action(
+                action.action_id,
+                "Captured screenshot",
+                after_screenshot=self.browser.screenshot(action.payload or "manual"),
+            )
+        if action.action_type == "browser_refresh":
+            return self._refresh_impl(action)
+        if action.action_type == "browser_back":
+            return self._back_impl(action)
+        if action.action_type == "browser_forward":
+            return self._forward_impl(action)
+        if action.action_type == "browser_close":
+            return self._close_browser_impl(action)
+        raise AgentPortalError(
+            f"Unsupported queued action type: {action.action_type}",
+            module="agent_portal.runtime",
+            likely_cause="The queued action type is not yet wired to a runtime implementation.",
+            suggested_fix="Use a supported browser action type or extend the runtime dispatcher.",
+            can_continue=True,
+        )
+
+    def _resolve_report_path(self, report_name: str) -> Path:
+        candidate = Path(report_name)
+        if candidate.is_absolute() and candidate.exists():
+            return candidate
+        report_path = self.base_path / self.config.report_directory / report_name
+        if report_path.exists():
+            return report_path
+        raise AgentPortalError(
+            f"Report {report_name} was not found.",
+            module="agent_portal.runtime",
+            likely_cause="The report name is stale or the file has been removed.",
+            suggested_fix="List available reports and retry with a current report name.",
+            can_continue=True,
+        )
 
     def _ensure_single_instance(self) -> None:
         if self._lock_path.exists():

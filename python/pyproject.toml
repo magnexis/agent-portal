@@ -2,14 +2,30 @@
 name = "agent-portal"
 version = "0.1.0"
 description = "Python runtime package for Agent Portal."
+readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Magnexis" }
+]
 dependencies = [
   "playwright>=1.54.0"
 ]
 
+[project.urls]
+Homepage = "https://github.com/magnexis/agent-portal"
+Repository = "https://github.com/magnexis/agent-portal.git"
+Issues = "https://github.com/magnexis/agent-portal/issues"
+
 [project.scripts]
 agent-portal-runtime = "agent_portal.server:main"
 agent-portal = "agent_portal.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["agent_portal*"]
 
 [build-system]
 requires = ["setuptools>=68"]
