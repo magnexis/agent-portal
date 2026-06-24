@@ -230,6 +230,11 @@ Important settings:
 - `agentPortal.runtimeUrl`
 - `agentPortal.preferredLocalDevPort`
 
+Official Python Package link:
+
+-[Agent Portal on Python Package Index](https://pypi.org/project/agent-portal/)
+
+
 ## SDK And Connectors
 
 The TypeScript SDK is shifting toward a thin client model that targets the Python runtime instead of owning browser sessions itself.
