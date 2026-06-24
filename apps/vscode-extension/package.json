@@ -5,9 +5,23 @@
   "version": "0.0.1",
   "publisher": "magnificent-language",
   "private": true,
+  "files": [
+    "dist/**",
+    "media/**",
+    "README.md",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magnexis/agent-portal.git"
+  },
+  "homepage": "https://github.com/magnexis/agent-portal",
+  "bugs": {
+    "url": "https://github.com/magnexis/agent-portal/issues"
+  },
   "icon": "media/agent-portal-logo.png",
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
