@@ -1,0 +1,19 @@
+{
+  "name": "agent-portal-skills",
+  "version": "0.1.0",
+  "type": "skill-plugin",
+  "permissions": [
+    "memory:read",
+    "reports:read",
+    "runtime:steer"
+  ],
+  "commands": [
+    "skills.react",
+    "skills.supabase",
+    "skills.stripe",
+    "skills.qa"
+  ],
+  "settings": {
+    "autoload": true
+  }
+}

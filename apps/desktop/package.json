@@ -1,0 +1,17 @@
+{
+  "name": "@agent-portal/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "npm run build --workspace @agent-portal/core && tsc -p tsconfig.json && node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@agent-portal/core": "0.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  }
+}

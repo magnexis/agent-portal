@@ -1,0 +1,16 @@
+{
+  "name": "agent-portal-python",
+  "version": "0.1.0",
+  "type": "python-plugin",
+  "permissions": [
+    "runtime:connect",
+    "reports:read",
+    "browser:control"
+  ],
+  "entryPoint": "python/agent_portal/__init__.py",
+  "commands": [
+    "portal.launch",
+    "portal.open",
+    "portal.report"
+  ]
+}

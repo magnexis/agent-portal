@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Portal Local Workflow</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05070c;
+        --panel: #0f1623;
+        --line: rgba(255, 255, 255, 0.1);
+        --text: #eef3ff;
+        --muted: #9cb2d1;
+        --blue: #3cc8ff;
+        --orange: #ff9a1f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at top left, rgba(60, 200, 255, 0.2), transparent 28%),
+          radial-gradient(circle at top right, rgba(255, 154, 31, 0.2), transparent 30%),
+          linear-gradient(180deg, #070b12, var(--bg));
+        color: var(--text);
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+
+      .panel {
+        width: min(92vw, 720px);
+        padding: 40px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(15, 22, 35, 0.96), rgba(7, 11, 18, 0.98));
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--blue);
+      }
+
+      h1 {
+        margin: 12px 0 8px;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+      }
+
+      p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      form {
+        display: grid;
+        gap: 14px;
+      }
+
+      label {
+        font-size: 0.95rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid rgba(60, 200, 255, 0.32);
+        border-radius: 14px;
+        background: rgba(7, 11, 18, 0.85);
+        color: var(--text);
+        font: inherit;
+      }
+
+      button {
+        padding: 14px 18px;
+        border: 0;
+        border-radius: 14px;
+        background: linear-gradient(90deg, var(--blue), var(--orange));
+        color: #061019;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 154, 31, 0.24);
+        background: rgba(255, 154, 31, 0.08);
+      }
+
+      .spacer {
+        height: 70vh;
+      }
+
+      .evidence {
+        margin-top: 24px;
+        padding: 20px;
+        border-radius: 18px;
+        border: 1px solid rgba(60, 200, 255, 0.24);
+        background: rgba(60, 200, 255, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="panel">
+      <div class="eyebrow">Local Proving Ground</div>
+      <h1>See, Act, Record</h1>
+      <p>
+        This local page exists to prove the Agent Portal browser loop against a
+        controlled app inside the repository.
+      </p>
+      <form id="workflow-form">
+        <label for="name">Agent Name</label>
+        <input id="name" name="name" type="text" placeholder="Portal Runner" />
+        <button id="generate-report" type="submit">Generate Result</button>
+      </form>
+      <div id="result" class="result" aria-live="polite">
+        Waiting for the agent to complete the workflow.
+      </div>
+      <div class="spacer" aria-hidden="true"></div>
+      <section id="evidence-panel" class="evidence">
+        <strong>Evidence Panel</strong>
+        <p>
+          If the agent reached this section, scrolling worked as part of the
+          browser automation flow.
+        </p>
+      </section>
+    </main>
+    <script>
+      const form = document.getElementById("workflow-form");
+      const result = document.getElementById("result");
+      const input = document.getElementById("name");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const value = input.value.trim() || "Unknown Agent";
+        result.textContent = `Workflow completed for ${value}. Screenshot and report are ready.`;
+      });
+    </script>
+  </body>
+  </html>

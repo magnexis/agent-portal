@@ -1,0 +1,20 @@
+{
+  "name": "example-runtime-plugin",
+  "version": "0.1.0",
+  "type": "agent-connector",
+  "permissions": [
+    "runtime:read",
+    "reports:read"
+  ],
+  "entryPoint": "connectors/rest-websocket-api/README.md",
+  "commands": [
+    "agentPortal.example.ping"
+  ],
+  "lifecycleHooks": [
+    "onLoad",
+    "onUnload",
+    "onSessionStart",
+    "onSessionEnd",
+    "onReport"
+  ]
+}

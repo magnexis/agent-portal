@@ -1,0 +1,128 @@
+{
+  "name": "agent-portal",
+  "displayName": "Agent Portal",
+  "description": "Control and steer AI agents through local browser/UI workflows.",
+  "version": "0.0.1",
+  "publisher": "magnificent-language",
+  "private": true,
+  "icon": "media/agent-portal-logo.png",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:agentPortal.sidebar",
+    "onCommand:agentPortal.startRuntime",
+    "onCommand:agentPortal.stopRuntime",
+    "onCommand:agentPortal.restartRuntime",
+    "onCommand:agentPortal.openCurrentProject",
+    "onCommand:agentPortal.runAgent",
+    "onCommand:agentPortal.pauseAgent",
+    "onCommand:agentPortal.resumeAgent",
+    "onCommand:agentPortal.stopAgent",
+    "onCommand:agentPortal.approveNextAction",
+    "onCommand:agentPortal.rejectNextAction",
+    "onCommand:agentPortal.generateReport",
+    "onCommand:agentPortal.openDocumentation",
+    "onCommand:agentPortal.connectRuntime"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agentPortal",
+          "title": "Agent Portal",
+          "icon": "media/agent-portal-logo.png"
+        }
+      ]
+    },
+    "views": {
+      "agentPortal": [
+        {
+          "id": "agentPortal.sidebar",
+          "name": "Control Center",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "agentPortal.startRuntime",
+        "title": "Agent Portal: Start Runtime"
+      },
+      {
+        "command": "agentPortal.stopRuntime",
+        "title": "Agent Portal: Stop Runtime"
+      },
+      {
+        "command": "agentPortal.restartRuntime",
+        "title": "Agent Portal: Restart Runtime"
+      },
+      {
+        "command": "agentPortal.openCurrentProject",
+        "title": "Agent Portal: Open Current Project"
+      },
+      {
+        "command": "agentPortal.runAgent",
+        "title": "Agent Portal: Run Agent"
+      },
+      {
+        "command": "agentPortal.pauseAgent",
+        "title": "Agent Portal: Pause Agent"
+      },
+      {
+        "command": "agentPortal.resumeAgent",
+        "title": "Agent Portal: Resume Agent"
+      },
+      {
+        "command": "agentPortal.stopAgent",
+        "title": "Agent Portal: Stop Agent"
+      },
+      {
+        "command": "agentPortal.approveNextAction",
+        "title": "Agent Portal: Approve Next Action"
+      },
+      {
+        "command": "agentPortal.rejectNextAction",
+        "title": "Agent Portal: Reject Next Action"
+      },
+      {
+        "command": "agentPortal.generateReport",
+        "title": "Agent Portal: Generate Report"
+      },
+      {
+        "command": "agentPortal.openDocumentation",
+        "title": "Agent Portal: Open Documentation"
+      },
+      {
+        "command": "agentPortal.connectRuntime",
+        "title": "Agent Portal: Connect To Running Runtime"
+      }
+    ],
+    "configuration": {
+      "title": "Agent Portal",
+      "properties": {
+        "agentPortal.runtimeUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8765",
+          "description": "Base URL for the local Agent Portal runtime."
+        },
+        "agentPortal.preferredLocalDevPort": {
+          "type": "number",
+          "default": 3000,
+          "description": "Preferred local development server port when multiple local apps are detected."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.100.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "agent-portal-vscode",
+  "version": "0.1.0",
+  "type": "vscode-extension",
+  "permissions": [
+    "workspace:read",
+    "browser:control",
+    "terminal:read"
+  ],
+  "entryPoint": "apps/vscode-extension/dist/extension.js",
+  "commands": [
+    "agentPortal.startRuntime",
+    "agentPortal.pauseAgent",
+    "agentPortal.runAgent",
+    "agentPortal.generateReport"
+  ],
+  "panels": [
+    "control-center",
+    "reports",
+    "logs",
+    "settings"
+  ],
+  "lifecycleHooks": [
+    "activate",
+    "deactivate"
+  ]
+}

@@ -1,0 +1,49 @@
+# Node and workspace dependencies
+node_modules/
+
+# TypeScript and build output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Playwright and browser artifacts
+playwright-report/
+test-results/
+
+# Runtime artifacts and local workspaces
+workspaces/
+*.log
+
+# Packaging artifacts
+*.vsix
+*.tgz
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Environment and secrets
+.env
+.env.*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# VS Code local settings
+.vscode/
+

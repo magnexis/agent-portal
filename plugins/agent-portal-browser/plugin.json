@@ -1,0 +1,19 @@
+{
+  "name": "agent-portal-browser",
+  "version": "0.1.0",
+  "type": "browser-extension",
+  "permissions": [
+    "browser:read",
+    "browser:control",
+    "network:inspect"
+  ],
+  "commands": [
+    "agentPortal.connectRuntime",
+    "agentPortal.capturePage",
+    "agentPortal.openQueue"
+  ],
+  "panels": [
+    "page-inspector",
+    "queue"
+  ]
+}

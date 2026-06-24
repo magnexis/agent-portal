@@ -1,0 +1,19 @@
+{
+  "name": "agent-portal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Desktop-native operating environment for AI agents.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @agent-portal/core && npm run build --workspace @agent-portal/sdk && npm run build --workspace @agent-portal/mcp-server && npm run build --workspace @agent-portal/desktop && npm run build --workspace @agent-portal/vscode-extension",
+    "dev": "npm run dev --workspace @agent-portal/desktop",
+    "check": "npm run build --workspace @agent-portal/core && npm run typecheck --workspace @agent-portal/core && npm run typecheck --workspace @agent-portal/sdk && npm run typecheck --workspace @agent-portal/mcp-server && npm run typecheck --workspace @agent-portal/desktop && npm run typecheck --workspace @agent-portal/vscode-extension",
+    "test": "python -m unittest discover -s python/tests -v && npm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

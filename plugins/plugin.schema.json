@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent Portal Plugin Manifest",
+  "type": "object",
+  "required": ["name", "version", "type", "permissions", "commands"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": [
+        "vscode-extension",
+        "browser-extension",
+        "python-plugin",
+        "agent-connector",
+        "skill-plugin"
+      ]
+    },
+    "permissions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "entryPoint": { "type": ["string", "null"] },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "settings": {
+      "type": "object"
+    },
+    "panels": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "lifecycleHooks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "onLoad",
+          "onUnload",
+          "onSessionStart",
+          "onSessionEnd",
+          "onBeforeAction",
+          "onAfterAction",
+          "onReport",
+          "activate",
+          "deactivate"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "runtime_host": "127.0.0.1",
+  "runtime_port": 8765,
+  "screenshot_directory": "workspaces/runtime/screenshots",
+  "report_directory": "workspaces/runtime/reports",
+  "default_browser": "chromium",
+  "action_mode": "assisted",
+  "approval_policy": "medium",
+  "allowed_domains": [],
+  "blocked_domains": [],
+  "enabled_plugins": [
+    "agent-portal-vscode",
+    "agent-portal-browser"
+  ],
+  "log_level": "INFO",
+  "retention_days": 14,
+  "sensitive_screenshots_enabled": false,
+  "safe_mode": true,
+  "api_token": null
+}
