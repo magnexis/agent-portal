@@ -5,6 +5,30 @@ All notable changes to Agent Portal will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2026-06-26
+
+### Fixed
+- **Critical: ThreadingHTTPServer / Playwright greenlet conflict (#1)**
+  Replaced `ThreadingHTTPServer` with single-threaded `HTTPServer`. Playwright
+  sync greenlets are pinned to the thread that started the browser; the
+  threaded server routed subsequent requests to new threads, crashing every
+  browser action with `greenlet.error: cannot switch to a different thread`.
+
+- **High: Error handler AttributeError (#2)**
+  `fail_action()` accessed `error.message` but `AgentPortalError` exposes the
+  message via `str(error)`, not a `.message` attribute. This caused the error
+  handler itself to crash, swallowing the real error and returning an empty
+  HTTP reply. Changed to `str(error)`.
+
+- **Medium: Stale lock file and port reuse (#3)**
+  - Added PID liveness check (`os.kill(pid, 0)`) to `_ensure_single_instance()`:
+    a stale lock from a crashed runtime is now auto-removed instead of
+    blocking restart.
+  - Added `SO_REUSEADDR` to both the port-probe socket and the HTTP server
+    socket, eliminating the ~60 s `TIME_WAIT` delay after a crash.
+
+---
+
 ## [0.1.0] - 2024-01-XX
 
 ### Added

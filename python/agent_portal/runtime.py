@@ -128,13 +128,13 @@ class PortalRuntime:
             "config": asdict(self.config),
             "policy": asdict(self.risk_policy),
             "plugins": self.list_plugins(),
-            "runtimeVersion": "0.0.2",
+            "runtimeVersion": "0.0.3",
         }
 
     def health(self) -> dict[str, Any]:
         return {
             "ok": True,
-            "runtimeVersion": "0.0.2",
+            "runtimeVersion": "0.0.3",
             "runtimeStatus": self.session.runtime_status,
             "browserConnected": self.browser_state.connected,
             "currentUrl": self.browser_state.current_url,

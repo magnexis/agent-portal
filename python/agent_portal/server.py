@@ -15,7 +15,7 @@ from .runtime import PortalRuntime
 
 def build_server(runtime: PortalRuntime) -> HTTPServer:
     class AgentPortalHandler(BaseHTTPRequestHandler):
-        server_version = "AgentPortalRuntime/0.0.2"
+        server_version = "AgentPortalRuntime/0.0.3"
 
         def _send_json(self, status: int, payload: object) -> None:
             encoded = json.dumps(payload, indent=2).encode("utf8")
