@@ -4,6 +4,8 @@
 
 # Agent Portal
 
+[![npm](https://img.shields.io/npm/v/agent-portal-2)](https://www.npmjs.com/package/agent-portal-2)
+
 Agent Portal is a desktop-native operating environment for AI agents.
 
 Instead of limiting an LLM to code generation, Agent Portal gives it a controlled visual workspace where it can understand, navigate, test, and interact with real user interfaces, local applications, browser sessions, development environments, and project ecosystems.
