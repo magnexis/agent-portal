@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { chromium, Locator, Page } from "playwright";
 
 export type AgentRole =
@@ -1605,8 +1606,7 @@ export function resolveWorkspaceFileUrl(
   workspaceBasePath: string,
   relativeFilePath: string
 ): string {
-  return new URL(`file:///${path.resolve(workspaceBasePath, relativeFilePath).replace(/\\/g, "/")}`)
-    .toString();
+  return pathToFileURL(path.resolve(workspaceBasePath, relativeFilePath)).toString();
 }
 
 export function validatePluginManifest(manifest: PluginManifest): string[] {
@@ -1798,7 +1798,11 @@ function maxRiskLevel(left: ActionRiskLevel, right: ActionRiskLevel): ActionRisk
 }
 
 function includesAny(haystack: string, needles: string[]): boolean {
-  return needles.some((needle) => haystack.includes(needle));
+  return needles.some((needle) => {
+    const escaped = needle.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const regex = new RegExp(`\\b${escaped}\\b`, "i");
+    return regex.test(haystack);
+  });
 }
 
 function domainMatches(target: string, domain: string): boolean {

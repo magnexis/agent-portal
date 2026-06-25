@@ -300,7 +300,7 @@ export class Portal {
   }
 
   async stop(): Promise<void> {
-    await this.post("/control/pause");
+    await this.post("/control/stop");
   }
 
   clearStop(): void {
@@ -319,20 +319,20 @@ export class Portal {
     await this.post("/control/goal", { goal });
   }
 
-  lockToDomain(_domain: string): void {
-    return;
+  async lockToDomain(domain: string): Promise<void> {
+    await this.post("/control/domain-lock", { domain });
   }
 
-  unlockDomain(): void {
-    return;
+  async unlockDomain(): Promise<void> {
+    await this.post("/control/domain-lock", { domain: null });
   }
 
-  lockToTab(_url: string): void {
-    return;
+  async lockToTab(url: string): Promise<void> {
+    await this.post("/control/tab-lock", { url });
   }
 
-  unlockTab(): void {
-    return;
+  async unlockTab(): Promise<void> {
+    await this.post("/control/tab-lock", { url: null });
   }
 
   async approveNextAction(): Promise<ActionQueueItem | undefined> {

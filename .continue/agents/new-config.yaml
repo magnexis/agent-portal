@@ -1,0 +1,22 @@
+name: Diff Config
+version: 1.0.0
+schema: v1
+
+models:
+  - name: GLM 5.2 Chat
+    provider: openai
+    model: glm-5.2
+    apiBase: https://api.z.ai/api/paas/v4
+    apiKey: 680bd41483654976867ca460ffa1c605.f8K53MYqu7JbdJFs
+    roles:
+      - chat
+      - edit
+      - apply
+
+  - name: GLM 5.2 Autocomplete
+    provider: openai
+    model: glm-5.2
+    apiBase: https://api.z.ai/api/paas/v4
+    apiKey: 680bd41483654976867ca460ffa1c605.f8K53MYqu7JbdJFs
+    roles:
+      - autocomplete
