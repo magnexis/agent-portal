@@ -1,7 +1,7 @@
 {
   "name": "agent-portal",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "Desktop-native operating environment for AI agents.",
   "workspaces": [
     "apps/*",
