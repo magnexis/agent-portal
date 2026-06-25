@@ -4,7 +4,7 @@ import json
 import threading
 from dataclasses import asdict
 from http import HTTPStatus
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -13,7 +13,7 @@ from .models import ActionRequest
 from .runtime import PortalRuntime
 
 
-def build_server(runtime: PortalRuntime) -> ThreadingHTTPServer:
+def build_server(runtime: PortalRuntime) -> HTTPServer:
     class AgentPortalHandler(BaseHTTPRequestHandler):
         server_version = "AgentPortalRuntime/0.0.2"
 
@@ -328,10 +328,12 @@ def build_server(runtime: PortalRuntime) -> ThreadingHTTPServer:
         def log_message(self, format: str, *args: object) -> None:  # noqa: A003
             return
 
-    return ThreadingHTTPServer(
+    server = HTTPServer(
         (runtime.config.runtime_host, runtime.config.runtime_port),
         AgentPortalHandler,
     )
+    server.allow_reuse_address = True
+    return server
 
 
 def serve(runtime: PortalRuntime | None = None) -> None:

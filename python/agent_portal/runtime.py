@@ -345,12 +345,12 @@ class PortalRuntime:
         action = next(entry for entry in self.session.approved_actions if entry.action_id == action_id)
         action.status = "failed"
         action.error = error.to_dict()
-        action.result = error.message
+        action.result = str(error)
         self.session.approved_actions = [
             entry for entry in self.session.approved_actions if entry.action_id != action_id
         ]
         self.session.failed_actions.append(action)
-        self.browser_state.last_error = error.message
+        self.browser_state.last_error = str(error)
         self.session.runtime_status = "failed"
         return action
 
@@ -713,11 +713,18 @@ class PortalRuntime:
 
     def _ensure_single_instance(self) -> None:
         if self._lock_path.exists():
-            raise OSError("Runtime lock file already exists")
+            try:
+                stale_pid = int(self._lock_path.read_text(encoding="utf8").strip())
+                os.kill(stale_pid, 0)
+            except (ValueError, ProcessLookupError, PermissionError):
+                self._remove_lock()
+            else:
+                raise OSError("Runtime lock file already exists")
         self._lock_path.write_text(str(os.getpid()), encoding="utf8")
 
     def _ensure_port_available(self) -> None:
         sock = socket.socket()
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
             sock.bind((self.config.runtime_host, self.config.runtime_port))
         finally:
