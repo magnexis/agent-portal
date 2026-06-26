@@ -1,5 +1,5 @@
 {
-  "name": "@agent-portal/mcp-server",
+  "name": "@magnexis/agent-portal-mcp-server",
   "version": "0.2.0",
   "private": false,
   "type": "module",

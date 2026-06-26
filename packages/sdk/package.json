@@ -1,5 +1,5 @@
 {
-  "name": "@agent-portal/sdk",
+  "name": "@magnexis/agent-portal-sdk",
   "version": "0.2.0",
   "private": false,
   "type": "module",
