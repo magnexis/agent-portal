@@ -1,16 +1,16 @@
 {
-  "name": "@agent-portal/desktop",
+  "name": "@magnexis/desktop",
   "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "npm run build --workspace @agent-portal/core && tsc -p tsconfig.json && node dist/main.js",
+    "dev": "npm run build --workspace @magnexis/agent-portal && tsc -p tsconfig.json && node dist/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "package": "npm run build && node ../../scripts/package_desktop.mjs"
   },
   "dependencies": {
-    "agent-portal-core": "0.2.0"
+    "@magnexis/agent-portal": "0.2.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.2"

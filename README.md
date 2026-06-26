@@ -4,7 +4,7 @@
 
 # Agent Portal
 
-[![npm](https://img.shields.io/npm/v/agent-portal-2)](https://www.npmjs.com/package/agent-portal-2)
+[![npm](https://img.shields.io/npm/v/@magnexis/agent-portal)](https://www.npmjs.com/package/@magnexis/agent-portal) [![npm SDK](https://img.shields.io/npm/v/@magnexis/sdk)](https://www.npmjs.com/package/@magnexis/sdk) [![npm MCP](https://img.shields.io/npm/v/@magnexis/mcp-server)](https://www.npmjs.com/package/@magnexis/mcp-server) [![PyPI](https://img.shields.io/pypi/v/agent-portal)](https://pypi.org/project/agent-portal/) [![PyPI MCP](https://img.shields.io/pypi/v/agent-portal-mcp)](https://pypi.org/project/agent-portal-mcp/) [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/magnificent-language.agent-portal)](https://marketplace.visualstudio.com/items?itemName=magnificent-language.agent-portal)
 
 Agent Portal is a desktop-native operating environment for AI agents.
 
@@ -192,7 +192,7 @@ agent-portal start
 6. In another terminal, run the desktop demo:
 
 ```bash
-npm run dev --workspace @agent-portal/desktop
+npm run dev --workspace @magnexis/desktop
 ```
 
 7. Open the VS Code extension sidebar and connect to the runtime.
@@ -214,7 +214,7 @@ The VS Code extension lives in `apps/vscode-extension` and is designed to be the
 
 Official extension link:
 
-- [Agent Portal on the Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/magnificent-language/extensions/agent-portal/hub)
+- [Agent Portal on the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=magnificent-language.agent-portal)
 
 It currently provides:
 

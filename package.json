@@ -8,9 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @agent-portal/core && npm run build --workspace @agent-portal/sdk && npm run build --workspace @agent-portal/mcp-server && npm run build --workspace @agent-portal/desktop && npm run build --workspace apps/vscode-extension",
-    "dev": "npm run dev --workspace @agent-portal/desktop",
-    "check": "npm run build --workspace @agent-portal/core && npm run typecheck --workspace @agent-portal/core && npm run typecheck --workspace @agent-portal/sdk && npm run typecheck --workspace @agent-portal/mcp-server && npm run typecheck --workspace @agent-portal/desktop && npm run typecheck --workspace apps/vscode-extension",
+    "build": "npm run build --workspace @magnexis/agent-portal && npm run build --workspace @magnexis/sdk && npm run build --workspace @magnexis/mcp-server && npm run build --workspace @magnexis/desktop && npm run build --workspace apps/vscode-extension",
+    "dev": "npm run dev --workspace @magnexis/desktop",
+    "check": "npm run build --workspace @magnexis/agent-portal && npm run typecheck --workspace @magnexis/agent-portal && npm run typecheck --workspace @magnexis/sdk && npm run typecheck --workspace @magnexis/mcp-server && npm run typecheck --workspace @magnexis/desktop && npm run typecheck --workspace apps/vscode-extension",
     "test": "python -m unittest discover -s python/tests -v && python -m unittest discover -s packages/agent-portal-mcp/tests -v && npm run build && node --test tests/*.test.mjs",
     "release:python": "python scripts/release_python.py",
     "release:desktop": "node scripts/package_desktop.mjs"

@@ -1,12 +1,14 @@
 # Agent Portal VS Code Extension
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/magnificent-language.agent-portal)](https://marketplace.visualstudio.com/items?itemName=magnificent-language.agent-portal) [![VS Code Installs](https://img.shields.io/visual-studio-marketplace/i/magnificent-language.agent-portal)](https://marketplace.visualstudio.com/items?itemName=magnificent-language.agent-portal)
+
 ![Agent Portal Logo](https://github.com/magnexis/agent-portal/raw/main/apps/vscode-extension/media/agent-portal-logo.png)
 
 This extension is the VS Code entry point for Agent Portal.
 
-Official extension link:
+## Install
 
-- [Agent Portal on the Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/magnificent-language/extensions/agent-portal/hub)
+Install directly from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=magnificent-language.agent-portal).
 
 ## Included Branding
 
