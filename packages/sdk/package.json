@@ -1,5 +1,5 @@
 {
-  "name": "agent-portal-sdk",
+  "name": "@agent-portal/sdk",
   "version": "0.2.0",
   "private": false,
   "type": "module",
@@ -10,6 +10,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "agent-portal-core": "0.2.0"
+    "@agent-portal/core": "0.2.0"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "agent-portal-2",
+  "name": "@agent-portal/core",
   "version": "0.2.0",
   "private": false,
   "type": "module",
