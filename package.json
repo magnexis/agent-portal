@@ -16,6 +16,6 @@
     "release:desktop": "node scripts/package_desktop.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
