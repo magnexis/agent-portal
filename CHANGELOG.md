@@ -5,6 +5,27 @@ All notable changes to Agent Portal will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-06-26
+
+### Added
+- **SKILL.md** — Comprehensive instruction file for AI coding agents (OpenAI Codex,
+  Claude Code, Cursor, Windsurf, GitHub Copilot, etc.) covering:
+  - Full repository structure with file-by-file descriptions
+  - Build, test, and run commands
+  - Architecture rules (single-threaded server, runtime ownership, data flow)
+  - Risk and approval model documentation
+  - HTTP API reference table (all 22 endpoints)
+  - Common task guides (adding browser actions, MCP tools, plugins)
+  - Safety-critical areas that must not be weakened
+  - Coding conventions for Python and TypeScript
+  - Testing patterns
+
+### Changed
+- Updated README documentation section to reference SKILL.md
+- Version bumped to 0.2.0
+
+---
+
 ## [0.0.3] - 2026-06-26
 
 ### Fixed

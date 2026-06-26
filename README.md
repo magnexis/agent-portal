@@ -361,6 +361,7 @@ Current hardening themes include:
 
 Top-level docs available in this repo:
 
+- `SKILL.md` — Instructions for AI coding agents (Codex, Claude Code, Cursor, Windsurf, etc.)
 - `INSTALLATION.md`
 - `QUICKSTART.md`
 - `CLI.md`
